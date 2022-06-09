@@ -2,3 +2,4 @@ openapi-processor-mapping: v2
 
 options:
   package-name: com.verint.tasksapi
+  model-name-suffix: DTO
