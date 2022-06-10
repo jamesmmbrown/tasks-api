@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 	id 'io.openapiprocessor.openapi-processor' version '2022.1'
 	id 'io.freefair.lombok' version '6.4.2'
+	id 'jacoco'
 }
 
 java {
@@ -19,32 +20,22 @@ jar {
 		)
 	}
 }
-
 group = 'com.verint.wfm'
 version = '0.0.1-SNAPSHOT'
-
 repositories {
 	mavenCentral()
 }
 
 dependencies {
 	compileOnly 'org.mapstruct:mapstruct:1.4.2.Final'
-
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.postgresql:postgresql:42.3.4'
-
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
-
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
 
 sourceSets {
@@ -70,5 +61,19 @@ openapiProcessor {
 		targetDir "$projectDir/build/openapi"
 		mapping "$projectDir/src/main/resources/mapping.yaml"
 		showWarnings true
+	}
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = false
+		csv.required = false
+		html.destination file("${buildDir}/reports/jacoco/test/html")
 	}
 }
