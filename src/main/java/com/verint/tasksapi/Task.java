@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +15,8 @@ import javax.persistence.Id;
 public class Task {
 
     @Id
+    @Column(name="id")
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
     private String name;
     private Boolean status;

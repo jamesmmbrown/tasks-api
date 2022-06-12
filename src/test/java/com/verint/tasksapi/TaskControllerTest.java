@@ -17,17 +17,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 @ExtendWith(MockitoExtension.class)
-class TasksControllerTest {
+class TaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private TasksService tasksService;
+    private TaskService taskService;
 
     @Test
     void getAll_noPrograms_returnsEmptyArray() throws Exception {
-        when(tasksService.getAll()).thenReturn(Collections.emptyList());
+        when(taskService.getAll()).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/tasks")).andExpect(status().isOk()).andExpect(content().json("[]"));
     }
