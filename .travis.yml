@@ -16,7 +16,12 @@ before_install:
 
 jobs:
   include:
-    - stage: "unit tests and static analysis"
+    - stage: "unit test"
+      name: "unit test"
+      script:
+        - ./gradlew test
+    - stage: "static analysis"
+      name: "static analysis"
       script:
         - ./gradlew jacocoTestReport
         - ./gradlew sonarqube
