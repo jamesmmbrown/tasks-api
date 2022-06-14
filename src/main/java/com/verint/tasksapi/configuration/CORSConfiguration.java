@@ -10,7 +10,7 @@ public class CORSConfiguration implements WebMvcConfigurer {
 
     private final String[] allowedOriginPatterns;
 
-    public CORSConfiguration(@Value("${if.cors.allowed.origins}") String[] allowedOriginPatterns) {
+    public CORSConfiguration(@Value("${tasks.cors.allowed.origins}") String[] allowedOriginPatterns) {
         this.allowedOriginPatterns = allowedOriginPatterns;
     }
 
