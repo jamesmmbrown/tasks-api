@@ -13,3 +13,10 @@ script:
 
 before_install:
   - chmod +x gradlew
+
+jobs:
+  include:
+    - stage: "unit tests and static analysis"
+      script:
+        - gradle jacocoTestReport
+        - gradle sonarqube
