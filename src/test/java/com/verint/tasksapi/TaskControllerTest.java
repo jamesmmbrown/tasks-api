@@ -54,11 +54,11 @@ class TaskControllerTest {
 
         mockMvc.perform(post(TASKS_URL).contentType(APPLICATION_JSON)
                         .content("""
-                                              {
-                                                  "name": "task 1",
-                                                  "status": false
-                                              }
-                                              """))
+                            {
+                                "name": "task 1",
+                                "status": false
+                            }
+                            """))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("""
                    {
@@ -70,6 +70,6 @@ class TaskControllerTest {
                 .andExpect(header().string(LOCATION, "http://localhost" + TASKS_URL + "/1"));
 
         verify(taskService).create(taskDTOCaptor.capture());
-        assertThat(taskDTOCaptor.getValue(), is(task(1L, "task 1", false)));
+        assertThat(taskDTOCaptor.getValue(), is(task("task 1", false)));
     }
 }

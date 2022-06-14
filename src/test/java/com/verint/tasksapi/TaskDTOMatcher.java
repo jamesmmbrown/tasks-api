@@ -18,6 +18,10 @@ public class TaskDTOMatcher extends TypeSafeMatcher<TaskDTO>  {
         return new TaskDTOMatcher(id, name, status);
     }
 
+    public static TaskDTOMatcher task(String name, Boolean status) {
+        return new TaskDTOMatcher(null, name, status);
+    }
+
     @Override
     protected boolean matchesSafely(TaskDTO item) {
         return Objects.equals(item.getId(), id) &&
