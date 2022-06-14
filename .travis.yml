@@ -1,5 +1,4 @@
 language: java
-
 jdk: openjdk17
 
 addons:
@@ -8,8 +7,8 @@ addons:
     token:
       secure: "eydO1hEpzqNDv5JqCoHoRFe/DMx4b4UNzZahJY9r1OyeQkfGEKdtVDFPKliauG6UeaSvT1oQgCHuMqfxelEiYNDNP65aDujuWyL0+Uuhutd+sXhnjJUMV629AdawBCEUTG5cvOXOXc8mD0sLuZVRKXYJN8bqEf4soIRjEe0uKuA7C6UDsP8CbZtR7f7mmEBuUXLLVl+nZD3jcY9s+i1RGkC87etr9hBeWH2lhsqahozcRaR6TL6VbRrE2+ppDzNFHYd8/dLhBfDILOdGcWXR3KuQ+RYV4k0tM2llLB96t9JYrSqN9TW9/mSOPme8dR6Purg+brqGGA6JYMeWrh9r9HAavF8/F4/05PAerTF7BTtnjkco16erbYvy+ciam2dv87GNmKYkrrOyRLVL+gNmbrjOEGi30an6Y5o1BpEzSg8JjIlTt/5lBa/Hdc7EP+MCcHbhK373nbvNbfkGNYnqlAwJ8wTRTKwszHQXBNSJcCQv8+6D9PmeZ7WUBcJfNZTpSH8BVN09lmJ94pdlmwGhpmPhOmXV+jR1oamLOHY3OgDHBgQt/+ugi1pRA544xAAOj1f/fgEznpEkHF61lJsGKcsiXRlXOvzfXQksFh30BDSmKYA5KpguKGPYjKB6sxUAOuZgfENCF5zO9ZabrR2h+vxozImCTeD9abnKbPa5hRo="
 
-#script:
-#  - ./gradlew sonarqube
+services:
+  - docker
 
 before_install:
   - chmod +x gradlew
