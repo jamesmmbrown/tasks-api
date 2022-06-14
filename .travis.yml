@@ -8,7 +8,7 @@ addons:
     token:
       secure: "5d9ca93edc9a93997a023dfb3fa20c119c90a859"
 
-script:
+script: 
   - ./gradlew sonarqube
 
 before_install:
