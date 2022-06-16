@@ -2,13 +2,13 @@ language: java
 jdk: openjdk17
 services:
 - docker
+before_install:
+  - chmod +x gradlew
 
 jobs:
   include:
   - stage: prepare build
-  - nane: prepare build
-    script:
-      - "chmod +x gradlew"
+    name: prepare build
 
   - stage: unit test
     name: unit test
