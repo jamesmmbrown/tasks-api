@@ -1,38 +1,48 @@
 language: java
 jdk: openjdk17
-addons:
-  sonarcloud:
-    organization: jamesmmbrown
-    token:
-      secure: eydO1hEpzqNDv5JqCoHoRFe/DMx4b4UNzZahJY9r1OyeQkfGEKdtVDFPKliauG6UeaSvT1oQgCHuMqfxelEiYNDNP65aDujuWyL0+Uuhutd+sXhnjJUMV629AdawBCEUTG5cvOXOXc8mD0sLuZVRKXYJN8bqEf4soIRjEe0uKuA7C6UDsP8CbZtR7f7mmEBuUXLLVl+nZD3jcY9s+i1RGkC87etr9hBeWH2lhsqahozcRaR6TL6VbRrE2+ppDzNFHYd8/dLhBfDILOdGcWXR3KuQ+RYV4k0tM2llLB96t9JYrSqN9TW9/mSOPme8dR6Purg+brqGGA6JYMeWrh9r9HAavF8/F4/05PAerTF7BTtnjkco16erbYvy+ciam2dv87GNmKYkrrOyRLVL+gNmbrjOEGi30an6Y5o1BpEzSg8JjIlTt/5lBa/Hdc7EP+MCcHbhK373nbvNbfkGNYnqlAwJ8wTRTKwszHQXBNSJcCQv8+6D9PmeZ7WUBcJfNZTpSH8BVN09lmJ94pdlmwGhpmPhOmXV+jR1oamLOHY3OgDHBgQt/+ugi1pRA544xAAOj1f/fgEznpEkHF61lJsGKcsiXRlXOvzfXQksFh30BDSmKYA5KpguKGPYjKB6sxUAOuZgfENCF5zO9ZabrR2h+vxozImCTeD9abnKbPa5hRo=
 services:
 - docker
-before_install:
-- chmod +x gradlew
+
 jobs:
   include:
+  - stage: prepare build
+  - nane: prepare build
+    script:
+      - "chmod +x gradlew"
+
   - stage: unit test
     name: unit test
     script:
-    - "./gradlew test"
+      - "./gradlew test"
+
   - stage: static analysis
     name: static analysis
     script:
-    - "./gradlew jacocoTestReport"
-    - "./gradlew sonarqube"
+      - "./gradlew jacocoTestReport"
+      - "./gradlew sonarqube"
+
 after_success:
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - docker tag back $DOCKER_USERNAME/back:$TRAVIS_BUILD_NUMBER
 - docker push $DOCKER_USERNAME/back:$TRAVIS_BUILD_NUMBER
 - docker tag back $DOCKER_USERNAME/back:latest
 - docker push $DOCKER_USERNAME/back:latest
+
 before_deploy:
   - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
+
 deploy:
   provider: heroku
   api_key: cdc21d38-df69-4376-ac20-9b8b448fa2fe
   app: larch-tasks-api
+
 env:
   global:
   - secure: pIVIuHaSrDTw5x3k8UqCzSwp8TSftAnzGUdt6SG4zvxMVZPEriJ8KJf3Iw8/X/nVHEvZZW0OlP0s960jzDFtCAZjqaKdap2ZMJIiPr1jfpevDIcY/FEG5eV6TWc6kGWcNxWaO7ed+tVMiUoK/BKf2p8qUetQakESf27ss2gBTM7VI8ES9zcLjV+76PZRixMw4Y1JXSNllMD+GGRk7NY8muFZJHqrKwLQW0HD+GoCTTUyhsKnMST01JygiQyGJfxt6b5PiVIl+eBRfTf2ZlTggvD66RUi6wAQ2fTdcDvyyAFYWs9F+iD56uQhyImFlT9mAvRlPi910X2wD3fSctOSVMDZMVCnv2ZSkSt8hHfilfaCUr+RNXdLUsDNdh03rQA8tcp9O/HIlP5J7i/MqeCWy0cz0DBD6ZIEk0Xr1idX8j5baGAgYX5hLE+AWlwHXjtlYtycl5gl3Dr0elKpHono+jrIp+sjGFxkIbjFog/nInSeYny4IXcETc9yRM7LWWtJ1a86V7yMMSKGe02jWUdlavMHCRGIr9cfLxlF4bgFJWJHC4uFfFBZrx3hj0ZiQHowC8sGKQlwq4M8ubzjWnBBDuGz7Gjv3naqtS3TayGD3e7AFudAznNyo4UMG6dnfMuFompkoTg7RecQsWZjlyO5D5nTY3qpBPok+P9fKhZwwNE=
   - secure: WIsS38h68sotS/uLb9YiO7BmhTLb6XTW6P+2XffvQExd42Q3tnHVWmZRPaxlVKX5gW7P3g2fZm1yt7ycsJZoBTbTChnbYAY4FbOf2wEa/o+Ql/WOGN+n/pp8oZoCx3vmpSvrRuTRinpIE2h8qZJPRJFn8Va5aEEe9QfgreJXJ7JQlbn3KfbYKSnPpabtcIKW5QOoe8D68mvLQOjsMTiprZ4JVNmF0KH+tf1Nur3TdOKWTNbJgd2pUJzu4U33e3mdrRro4WHX/lPeMJ4lwaDdAN933ILslvEBHW+bNqi5aUD21aYL3qc2TQA3ZSgOjg8z5wXFpC+ilF0sbdQLAIHc3gIUaWNrVnAkfgmwlO5TmIL5Dcls/Pi8m9UUsK7O1miKnzoM7MtKQjGWqbCIptFwwv9XexUm37wnnnnoTwJtqOmfvirsBPrLpXTQX5EI9ZDyCie/iW2I+RTcwEOW5H1HhkAhTeJkUSe9BBfb5PEBA/uo70Qpqd6+9q9dN2AkLmtZVH+SoCtEOm7j09PvYQLEhlzYbUCle7rkwIk22n2z87bLkgsdi2X7mC47VSmST3PJB7R3BD26oV/dqa71BKsKR6dOrm0ZnVZTp84dD72GRzqgdfY5DumURA0KSd3F1Ey4km7RAU7zyxN1lrIjqLBAzK13pLSR6S2xZ5u3N684eec=
+
+addons:
+  sonarcloud:
+    organization: jamesmmbrown
+    token:
+      secure: eydO1hEpzqNDv5JqCoHoRFe/DMx4b4UNzZahJY9r1OyeQkfGEKdtVDFPKliauG6UeaSvT1oQgCHuMqfxelEiYNDNP65aDujuWyL0+Uuhutd+sXhnjJUMV629AdawBCEUTG5cvOXOXc8mD0sLuZVRKXYJN8bqEf4soIRjEe0uKuA7C6UDsP8CbZtR7f7mmEBuUXLLVl+nZD3jcY9s+i1RGkC87etr9hBeWH2lhsqahozcRaR6TL6VbRrE2+ppDzNFHYd8/dLhBfDILOdGcWXR3KuQ+RYV4k0tM2llLB96t9JYrSqN9TW9/mSOPme8dR6Purg+brqGGA6JYMeWrh9r9HAavF8/F4/05PAerTF7BTtnjkco16erbYvy+ciam2dv87GNmKYkrrOyRLVL+gNmbrjOEGi30an6Y5o1BpEzSg8JjIlTt/5lBa/Hdc7EP+MCcHbhK373nbvNbfkGNYnqlAwJ8wTRTKwszHQXBNSJcCQv8+6D9PmeZ7WUBcJfNZTpSH8BVN09lmJ94pdlmwGhpmPhOmXV+jR1oamLOHY3OgDHBgQt/+ugi1pRA544xAAOj1f/fgEznpEkHF61lJsGKcsiXRlXOvzfXQksFh30BDSmKYA5KpguKGPYjKB6sxUAOuZgfENCF5zO9ZabrR2h+vxozImCTeD9abnKbPa5hRo=
